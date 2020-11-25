@@ -62,15 +62,22 @@
                 margin-bottom: 30px;
             }
         </style>
+
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
+
+        <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ url('/admin') }}">Login</a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}">Register</a>
@@ -80,19 +87,47 @@
             @endif
 
             <div class="content">
+                <br/><br/>
                 <div class="title m-b-md">
-                    Laravel
+                    PostsApp
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+
+
+
+
+
+
+
+
+                <div class="py-5">
+                    <div class="container">
+                        <div class="row hidden-md-up">
+                            @foreach($posts as $post)
+                                <div class="col-md-4">
+                                    <div class="card" style="padding:7px; margin-bottom: 20px;">
+                                        <div class="card-block">
+                                            <h4 class="card-title">{{ $post->title }}</h4>
+                                            <h6 class="card-subtitle text-muted">{{ date('d-m-Y h:i:s', strtotime($post->publication_date)) }}</h6>
+                                            <p class="card-text p-y-1">{{ $post->content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
     </body>

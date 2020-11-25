@@ -15,7 +15,7 @@ class PostsController extends Controller
     public function index()
     {
         // Show registers
-        $data['posts']=Posts::paginate(5);
+        $data['posts']=Posts::paginate(4);
         return view('posts.index', $data);
     }
 
@@ -38,13 +38,28 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate
+        $fields = [
+            'title' => 'required|string|unique:posts|max:200',
+            'content' => 'required',
+            'status' => 'required'
+        ];
+        $message = [
+            'required' => 'The :attribute is required.',
+            'string' => 'The :attribute is of type text.',
+            'max' => 'The :attribute has a maximum of :max characters.',
+            'unique' => 'The :attribute is unique.'
+        ];
+
+        $this->validate($request, $fields, $message);
+
         // Save data
         $dataPost = request()->except('_token');
         $dataPost['created_at'] = new \DateTime();
 
         Posts::insert($dataPost);
 
-        return redirect('posts')->with('message', '¡Artículo guardado con éxito!');
+        return redirect('posts')->with('message', 'The post was saved successfully!');
     }
 
     /**
@@ -80,11 +95,26 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validate
+        $fields = [
+            'title' => 'required|string|max:200',
+            'content' => 'required',
+            'status' => 'required'
+        ];
+        $message = [
+            'required' => 'The :attribute is required.',
+            'string' => 'The :attribute is of type text.',
+            'max' => 'The :attribute has a maximum of :max characters.',
+            'unique' => 'The :attribute is unique.'
+        ];
+
+        $this->validate($request, $fields, $message);
+        
         // Update data
         $dataPost = request()->except(['_token', '_method']);
         Posts::where('id', '=', $id)->update($dataPost);
 
-        return redirect('posts')->with('message', '¡Artículo editado con éxito!');
+        return redirect('posts')->with('message', 'The post has been successfully updated!');
     }
 
     /**
@@ -98,6 +128,6 @@ class PostsController extends Controller
         // Delete data
         Posts::destroy($id);
 
-        return redirect('posts')->with('message', '¡El artículo fue eliminado!');
+        return redirect('posts')->with('message', 'The post was removed successfully!');
     }
 }

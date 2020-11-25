@@ -11,8 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'IndexController@index');
+
+Route::get('/admin', function () {
+    return view('auth.login');
 });
 
-Route::resource('posts', 'PostsController');
+Route::resource('posts', 'PostsController')->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
